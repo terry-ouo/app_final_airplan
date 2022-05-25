@@ -24,12 +24,21 @@
         tools:ignore="MissingConstraints" />
 
     <ImageButton
-        android:id="@+id/start"
+        android:id="@+id/bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/start" />
+
+    <ImageView
+        android:id="@+id/airplan"
+        android:layout_width="119dp"
+        android:layout_height="80dp"
+        app:srcCompat="@drawable/fly1"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="71dp"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

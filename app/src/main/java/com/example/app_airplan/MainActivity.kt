@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.AttributeSet
@@ -14,17 +15,22 @@ import android.view.SurfaceView
 import android.view.View
 import kotlinx.coroutines.*
 
-class MainActivity : AppCompatActivity() {
-    lateinit var job: Job
+class MainActivity : AppCompatActivity(), View.OnTouchListener {
     lateinit var binding: ActivityMainBinding
+    lateinit var job: Job
     var game_status = false
+    lateinit var mper: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.start.setOnClickListener {
+
+        mper = MediaPlayer()
+
+        binding.airplan.setOnTouchListener(this)
+        binding.bottom.setOnClickListener {
             game_status = !game_status
             job = GlobalScope.launch(Dispatchers.Main) {
                 while (game_status) {
@@ -39,11 +45,11 @@ class MainActivity : AppCompatActivity() {
 
                     }
                 }
-
-
             }
         }
+
     }
+
     override fun onPause() {
         super.onPause()
         job.cancel()
@@ -51,16 +57,28 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (!game_status){
+        if (!game_status) {
             job = GlobalScope.launch(Dispatchers.Main) {
                 delay(25)
                 val canvas: Canvas = binding.surfaceView.holder.lockCanvas()
                 binding.surfaceView.drawSomething(canvas)
                 binding.surfaceView.holder.unlockCanvasAndPost(canvas)
             }
-            }
+        }
+    }
+
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        if (event?.action == MotionEvent.ACTION_MOVE) {
+            v?.x = 20f
+            v?.y = event.rawY - v!!.height / 2
         }
 
+        return true
+    }
+    fun Start_play(v:View){
+        mper = MediaPlayer.create(this,R.raw.shoot)
+        mper.start()
+    }
 
 
 }
